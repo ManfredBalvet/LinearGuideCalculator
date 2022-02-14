@@ -43,21 +43,21 @@ def config_for_length(length: int):
             for [w, x, y, z] in config_low:
                 price = w * mo_lm_014_2295_price + x * mo_lm_014_1530_price + y * mo_lm_014_0855_price + z * mo_lm_014_0585_price
                 segments = w + x + y + z
-                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too small by {abs(closest_low)} for {segments} segments at {price}$")
+                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too short by {abs(closest_low)} for {segments} segments at {price}$")
         elif abs(closest_low) > closest_high:
             for [w, x, y, z] in config_high:
                 price = w * mo_lm_014_2295_price + x * mo_lm_014_1530_price + y * mo_lm_014_0855_price + z * mo_lm_014_0585_price
                 segments = w + x + y + z
-                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too big by {abs(closest_high)} for {segments} segments at {price}$")
+                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too long by {abs(closest_high)} for {segments} segments at {price}$")
         else:
             for [w, x, y, z] in config_low:
                 price = w * mo_lm_014_2295_price + x * mo_lm_014_1530_price + y * mo_lm_014_0855_price + z * mo_lm_014_0585_price
                 segments = w + x + y + z
-                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too small by {abs(closest_low)} for {segments} segments at {price}$")
+                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too short by {abs(closest_low)} for {segments} segments at {price}$")
             for [w, x, y, z] in config_high:
                 price = w * mo_lm_014_2295_price + x * mo_lm_014_1530_price + y * mo_lm_014_0855_price + z * mo_lm_014_0585_price
                 segments = w + x + y + z
-                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too big by {abs(closest_high)} for {segments} segments at {price}$")
+                print(f"{w}x MO-LM-014-2295, {x}x MO-LM-014-1530, {y}x MO-LM-014-0855, {z}x MO-LM-014-585 will be too long by {abs(closest_high)} for {segments} segments at {price}$")
     else:
         for [w, x, y, z] in config_exact:
             price = w * mo_lm_014_2295_price + x * mo_lm_014_1530_price + y * mo_lm_014_0855_price + z * mo_lm_014_0585_price
