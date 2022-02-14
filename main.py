@@ -1,5 +1,6 @@
 from config_for_length import config_for_length
 
-length = 3105
+if __name__ == "__main__":
+    length = 3105
 
-config_for_length(length)
+    config_for_length(length)
