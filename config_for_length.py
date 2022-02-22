@@ -6,7 +6,6 @@ def config_for_length(length: int) -> str:
         (855, 292.66),
         (585, 232.54)
     ]
-    _0585 = 585
 
     closest_high = length
     closest_low = - length
@@ -20,23 +19,30 @@ def config_for_length(length: int) -> str:
                 for z in range(length // mo_lm_014[3][0] + 2):
                     possible_length = mo_lm_014[0][0] * w + mo_lm_014[1][0] * x + mo_lm_014[2][0] * y + mo_lm_014[3][0] * z
                     difference = possible_length - length
+
                     if difference == 0:
                         config_exact.append([w, x, y, z])
                         closest_low = difference
                         closest_high = difference
+
                     elif difference < 0:
                         if closest_low < difference:
                             closest_low = difference
                             config_low = [[w, x, y, z]]
+
                         elif closest_low == difference:
                             config_low.append([w, x, y, z])
+
                     elif difference > 0:
                         if closest_high > difference:
                             closest_high = difference
                             config_high = [[w, x, y, z]]
+
                         elif closest_high == difference:
                             config_high.append([w, x, y, z])
+
     output = ""
+
     if len(config_exact) == 0:
         for [w, x, y, z] in config_low:
             price = __get_price([w, x, y, z], mo_lm_014)
