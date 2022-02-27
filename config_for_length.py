@@ -1,80 +1,98 @@
+import math
+from shaft import Shaft
+from itertools import product
+from collections import namedtuple
 
-def config_for_length(length: int) -> str:
-    mo_lm_014 = [
-        (2295, 539.12),
-        (1530, 357.68),
-        (855, 292.66),
-        (585, 232.54)
-    ]
 
-    closest_high = length
-    closest_low = - length
+ShaftOrder = namedtuple('ShaftOrder', 'quantity, shaft')
+
+
+def config_for_length(target_length: int, shafts: list[Shaft]) -> list[str]:
+
+    closest_high = target_length
+    closest_low = - target_length
     config_low = []
     config_high = []
     config_exact = []
 
-    for w in range(length // mo_lm_014[0][0] + 2):
-        for x in range(length // mo_lm_014[1][0] + 2):
-            for y in range(length // mo_lm_014[2][0] + 2):
-                for z in range(length // mo_lm_014[3][0] + 2):
-                    possible_length = mo_lm_014[0][0] * w + mo_lm_014[1][0] * x + mo_lm_014[2][0] * y + mo_lm_014[3][0] * z
-                    difference = possible_length - length
+    possible_configs = [range(math.ceil(target_length / shaft.length) + 1) for shaft in shafts]
+    for possible_config in product(*possible_configs):
+        print(possible_config)
+        possible_length = 0
+        for i in range(len(shafts)):
+            possible_length += possible_config[i] * shafts[i].length
 
-                    if difference == 0:
-                        config_exact.append([w, x, y, z])
-                        closest_low = difference
-                        closest_high = difference
+        difference = possible_length - target_length
 
-                    elif difference < 0:
-                        if closest_low < difference:
-                            closest_low = difference
-                            config_low = [[w, x, y, z]]
+        if difference == 0:
+            config_exact.append(possible_config)
+            closest_low = difference
+            closest_high = difference
 
-                        elif closest_low == difference:
-                            config_low.append([w, x, y, z])
+        elif difference < 0:
+            if closest_low < difference:
+                closest_low = difference
+                config_low = [possible_config]
+            elif difference == closest_low:
+                config_low.append(possible_config)
 
-                    elif difference > 0:
-                        if closest_high > difference:
-                            closest_high = difference
-                            config_high = [[w, x, y, z]]
+        elif 0 < difference:
+            if difference < closest_high:
+                closest_high = difference
+                config_high = [possible_config]
+            elif difference == closest_high:
+                config_high.append(possible_config)
 
-                        elif closest_high == difference:
-                            config_high.append([w, x, y, z])
+    # if len(config_exact) > 0:
+    #     config_price = []
+    #     config_segment = []
+    #     for config in config_exact:
+    #         config_price.append(__get_price(config, price_list))
+    #         config_segment.append(sum(config))
+    #     price_rank = [0] * len(config_price)
+    #     segment_rank = [0] * len(config_segment)
+    #     for rank in
 
-    output = ""
-
+    outputs = []
     if len(config_exact) == 0:
-        for [w, x, y, z] in config_low:
-            price = __get_price([w, x, y, z], mo_lm_014)
-            segments = w + x + y + z
-            for i, segment in enumerate([w, x, y, z]):
+        for config in config_low:
+            price = __get_price(config, shafts)
+            segments = sum(config)
+            output = ""
+            for i, segment in enumerate(config):
                 if segment > 0:
-                    output += f"{segment}x MO-LM-014-{mo_lm_014[i][0]}, "
-            output += f"will be too short by {abs(closest_low)} for {segments} segments at {price}$\n"
+                    output += f"{segment}x {shafts[i].name}, "
+            output += f"will make a shaft too short by {abs(closest_low)}mm with {segments} segments for a total of ${price:.2f}USD\n"
+            outputs.append(output)
 
-        for [w, x, y, z] in config_high:
-            price = __get_price([w, x, y, z], mo_lm_014)
-            segments = w + x + y + z
-            for i, segment in enumerate([w, x, y, z]):
+        for config in config_high:
+            price = __get_price(config, shafts)
+            segments = sum(config)
+            output = ""
+            for i, segment in enumerate(config):
                 if segment > 0:
-                    output += f"{segment}x MO-LM-014-{mo_lm_014[i][0]}, "
-            output += f"will be too long by {abs(closest_high)} for {segments} segments at {price}$\n"
+                    output += f"{segment}x {shafts[i].name}, "
+            output += f"will make a shaft long by {abs(closest_high)}mm with {segments} segments for a total of ${price:.2f}USD\n"
+            outputs.append(output)
 
     else:
-        for [w, x, y, z] in config_exact:
-            price = __get_price([w, x, y, z], mo_lm_014)
-            segments = w + x + y + z
-            for i, segment in enumerate([w, x, y, z]):
+        for config in config_exact:
+            price = __get_price(config, shafts)
+            segments = sum(config)
+            output = ""
+            for i, segment in enumerate(config):
                 if segment > 0:
-                    output += f"{segment}x MO-LM-014-{mo_lm_014[i][0]}, "
-            output += f"will work for {segments} segments at {price}$\n"
+                    output += f"{segment}x {shafts[i].name}, "
+            output += f"will work with {segments} segments for a total of ${price:.2f}USD\n"
+            outputs.append(output)
+    print(outputs)
 
-    return output
+    return outputs
 
 
-def __get_price(config: list[int], mo_lm_014: list[tuple[int, float]]) -> int:
+def __get_price(config: list[int], shafts: list[Shaft]) -> float:
     price = 0
     for i, segments in enumerate(config):
-        price += segments * mo_lm_014[i][1]
+        price += segments * shafts[i].price
 
     return price

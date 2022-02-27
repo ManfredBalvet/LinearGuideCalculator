@@ -1,16 +1,33 @@
 from config_for_length import config_for_length
 import tkinter as tk
+from shaft import Shaft
+from scraper import get_live_price
 
 
 def main():
-    length = answer.get()
-    lbl_output1["text"] = ""
-    lbl_output2["text"] = ""
-    if length.isdigit():
-        output = config_for_length(int(length))
-        lbl_output1["text"] = f"\nFor a {length}mm shaft you need:\n\n" + output
+    target_length = answer.get()
+    configurations["text"] = ""
+    warning["text"] = ""
+    # Scrap price to get live price when login won't be required
+    shafts = [
+        Shaft("MO-LM-014-2295__2", length=2295, price=539.18),
+        Shaft("MO-LM-014-1530__2", length=1530, price=357.68),
+        Shaft("MO-LM-014-0855__2", length=855, price=292.66),
+        Shaft("MO-LM-014-0585__2", length=585, price=232.54),
+    ]
+
+    if target_length.isdigit():
+        current_pricing = "Using those shafts and price:"
+        for shaft in shafts:
+            current_pricing += f"\n{shaft.name} at ${shaft.price}USD"
+        warning["text"] = current_pricing
+        outputs = config_for_length(int(target_length), shafts)
+        configuration_text = f"\nFor a {target_length}mm shaft you have {len(outputs)} configurations:\n\n"
+        for output in outputs:
+            configuration_text += output
+        configurations["text"] = configuration_text
     else:
-        lbl_output2["text"] = "\nYour length needs to be a number"
+        warning["text"] = "Don't be a Terry, your target_length needs to be a number"
 
 
 if __name__ == "__main__":
@@ -18,16 +35,16 @@ if __name__ == "__main__":
     window.title("Long Shafts Configurations")
     window.resizable(width=True, height=True)
 
-    question = tk.Label(master=window, text="What length you want to build?", width=60)
+    question = tk.Label(master=window, text="How long do you need you shaft to be? (mm)", width=60)
     answer = tk.Entry(master=window, width=30)
     button = tk.Button(master=window, text="Calculate!", command=main)
-    lbl_output1 = tk.Label(master=window)
-    lbl_output2 = tk.Label(master=window, fg="red")
+    configurations = tk.Label(master=window)
+    warning = tk.Label(master=window, fg="red")
 
     question.grid(row=0, column=0)
     answer.grid(row=1, column=0)
     button.grid(row=2, column=0, sticky="ns")
-    lbl_output1.grid(row=3, column=0, sticky="nw")
-    lbl_output2.grid(row=3, column=0, sticky="nw")
+    configurations.grid(row=4, column=0, sticky="e")
+    warning.grid(row=3, column=0, sticky="ns")
 
     window.mainloop()
