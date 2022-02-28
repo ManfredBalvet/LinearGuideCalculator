@@ -1,5 +1,6 @@
 import math
-from classes import Shaft, ShaftComposite
+from shaft import Shaft
+from shaft_composite import ShaftComposite
 from itertools import product
 from collections import namedtuple
 

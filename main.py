@@ -1,6 +1,6 @@
 from config_for_length import config_for_length
 import tkinter as tk
-from classes import Shaft
+from shaft import Shaft
 from scraper import get_live_price
 
 
@@ -35,13 +35,13 @@ if __name__ == "__main__":
     question = tk.Label(master=window, text="How long do you need you shaft to be? (mm)", width=60)
     answer = tk.Entry(master=window, width=30)
     button = tk.Button(master=window, text="Calculate!", command=main)
-    configurations = tk.Label(master=window)
+    configurations = tk.Label(master=window, justify="left")
     warning = tk.Label(master=window, fg="red")
 
     question.grid(row=0, column=0)
     answer.grid(row=1, column=0)
     button.grid(row=2, column=0)
-    configurations.grid(row=4, column=0)
     warning.grid(row=3, column=0)
+    configurations.grid(row=4, column=0)
 
     window.mainloop()

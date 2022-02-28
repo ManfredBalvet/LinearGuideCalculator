@@ -38,5 +38,5 @@ exe = EXE(pyz,
           target_arch=None,
           codesign_identity=None,
           entitlements_file=None,
-          icon="D:\\Programming\\Vention\\LinearGuideCalculator\\build\\.ico\\MO-LM-014-0585.ico"
+          icon="D:\\Programming\\Vention\\LinearGuideCalculator\\build\\.ico\\MO-LM-014-0585__2.ico"
           )
