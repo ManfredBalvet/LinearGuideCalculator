@@ -1,6 +1,6 @@
 from config_for_length import config_for_length
 import tkinter as tk
-from shaft import Shaft
+from classes import Shaft
 from scraper import get_live_price
 
 
@@ -21,11 +21,8 @@ def main():
         for shaft in shafts:
             current_pricing += f"\n{shaft.name} at ${shaft.price}USD"
         warning["text"] = current_pricing
-        outputs = config_for_length(int(target_length), shafts)
-        configuration_text = f"\nFor a {target_length}mm shaft you have {len(outputs)} configurations:\n\n"
-        for output in outputs:
-            configuration_text += output
-        configurations["text"] = configuration_text
+        configurations["text"] = config_for_length(int(target_length), shafts)
+
     else:
         warning["text"] = "Don't be a Terry, your target_length needs to be a number"
 
@@ -43,8 +40,8 @@ if __name__ == "__main__":
 
     question.grid(row=0, column=0)
     answer.grid(row=1, column=0)
-    button.grid(row=2, column=0, sticky="ns")
-    configurations.grid(row=4, column=0, sticky="e")
-    warning.grid(row=3, column=0, sticky="ns")
+    button.grid(row=2, column=0)
+    configurations.grid(row=4, column=0)
+    warning.grid(row=3, column=0)
 
     window.mainloop()
